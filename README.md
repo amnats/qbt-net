@@ -1,5 +1,4 @@
-# qbtnet
-Query by Text in .Net
+# Query by Text in .Net
 
 This library heavily inspired by the OData makes it easier to write universal providers to data storages.
 It transforms a text query into an expression tree consumable by the Entity Framework queries.
@@ -7,9 +6,6 @@ It transforms a text query into an expression tree consumable by the Entity Fram
 In tests you can find self disctiptive examples.
 
 *It currently supports only one binary operation at a time.*
-
-### Simple example:
-
 
 #### Supported operators:
 - [x] **eq** Equal
@@ -30,3 +26,4 @@ In tests you can find self disctiptive examples.
 - [ ] string methods e.g. contains, endswith etc.
 - [ ] Take
 - [ ] Offset
+- [ ] Escaping characters
