@@ -17,7 +17,7 @@ In tests you can find self disctiptive examples.
 - [x] **gt** Greater than 
 - [x] **lt** Less than 
 - [x] **ge** Grater than or equal 
-- [x] **ge** Less than or equal 
+- [x] **le** Less than or equal 
 - [ ] **and** And 
 - [ ] **or** Or 
 
