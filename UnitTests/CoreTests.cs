@@ -6,6 +6,9 @@ using QueryByText;
 
 namespace UnitTests
 {
+    // TODO: add tests for various number types
+    // TODO: add a test for a date tipe
+
     [TestFixture]
     public class Tests
     {

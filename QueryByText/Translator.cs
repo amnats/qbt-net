@@ -52,7 +52,7 @@ namespace QueryByText
             var splitted = new List<string>();
             bool insideQuotes = false;
             string node = "";
-            // TODO: change to reqular expression
+            // TODO: change to a reqular expression
             for (int i = 0; i < filterStr.Length; i++)
             {
                 char ch = filterStr[i];
@@ -123,10 +123,26 @@ namespace QueryByText
 
         private Expression VisitBinary(FilterExpression exp)
         {
-            var leftVal = Visit(exp.LeftExpr);
-            var rightVal = Visit(exp.RightExpr);
+            var leftExpr = Visit(exp.LeftExpr);
+            var rightExpr = Visit(exp.RightExpr);
 
-            return Expression.MakeBinary(exp.NodeType, leftVal, rightVal);
+            ConvertByPriority(ref leftExpr, ref rightExpr);
+
+            return Expression.MakeBinary(exp.NodeType, leftExpr, rightExpr);
+        }
+
+        private void ConvertByPriority(ref Expression left, ref Expression right)
+        {
+            var leftTypeCode = Type.GetTypeCode(left.Type);
+            var rightTypeCode = Type.GetTypeCode(right.Type);
+
+            if (leftTypeCode == rightTypeCode)
+                return;
+
+            if (leftTypeCode > rightTypeCode)
+                right = Expression.Convert(right, left.Type);
+            else
+                left = Expression.Convert(left, right.Type);
         }
 
         private Expression VisitConstant(FilterExpression exp)
