@@ -1,13 +1,31 @@
 # Query by Text in .Net
 
-This library heavily inspired by the OData makes it easier to write universal providers to data storages.
-It transforms a text query into an expression tree consumable by the Entity Framework queries.
+In a yak shaving accident I implemented a stripped down version of the OData provider. One can even say that it was a good exercise in understanding C# expression trees and LINQ queries.
+All that this library can do is transform a text query into an expression tree consumable by any LINQ provider.
 
-In tests you can find self disctiptive examples.
+It can recognise field names and even discern strings from numbers!
 
-*It currently supports only one binary operation at a time.*
+#### Example
 
-#### Supported operators:
+```cs
+var expressionBuilder { get; } = new FilterExpressionBuilder<User>();
+
+var filterStr = "userName eq 'Luke Skywalker'";
+var expr = expressionBuilder.TranslateToExpression(filterStr);
+var filtered = Users.Where(expr).ToList();
+
+Assert.That(filtered.Count, Is.EqualTo(1));
+Assert.That(filtered.First.UserName, Is.EqualTo("Luke Skywalker"));
+```
+
+```cs
+public class User
+{
+  public string UserName { get; set; }
+}
+```
+
+#### Supported binary operators:
 - [x] **eq** Equal
 - [x] **ne** Not equal 
 - [x] **gt** Greater than 
@@ -17,8 +35,9 @@ In tests you can find self disctiptive examples.
 - [ ] **and** And 
 - [ ] **or** Or 
 
-#### Things to be added:
-- [x] Support both for camel case and pascal case field names
+#### Nice things to have in future:
+- [x] Support both for camel case and pascal case field names in the text query
+- [ ] Support for more than one operator at a time
 - [ ] Bracket support
 - [ ] Order by
 - [ ] First
