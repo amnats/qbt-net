@@ -14,8 +14,8 @@ var filterStr = "userName eq 'Luke Skywalker'";
 var expr = expressionBuilder.TranslateToExpression(filterStr);
 var filtered = Users.Where(expr).ToList();
 
-Assert.That(filtered.Count, Is.EqualTo(1);
-Assert.That(filtered.First.UserName, Is.EqualTo("Luke Skywalker");
+Assert.That(filtered.Count, Is.EqualTo(1));
+Assert.That(filtered.First.UserName, Is.EqualTo("Luke Skywalker"));
 ```
 
 ```cs
