@@ -1,7 +1,7 @@
-# Query by Text in .Net
+# Query by Text in C#
 
 In a yak shaving accident I implemented a stripped down version of the OData provider. One can even say that it was a good exercise in understanding C# expression trees and LINQ queries.
-All that this library can do is transform a text query into an expression tree consumable by any LINQ provider.
+All that this library can do is transform a text query into an expression tree consumable by a LINQ provider.
 
 It can recognise field names and even discern strings from numbers!
 
