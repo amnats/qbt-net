@@ -6,7 +6,6 @@ using System.Text;
 
 namespace QueryByText
 {
-
     public class FilterExpression
     {
         public FilterExpression LeftExpr { get; }
