@@ -10,17 +10,19 @@ namespace QueryByText
     // This is a disgrace 
     public class FilterVisitor
     {
+        private readonly Expression _parameterExpr;
+
         public FilterVisitor(Expression parameterExpr)
         {
             _parameterExpr = parameterExpr;
         }
 
-        private Expression _parameterExpr;
-
         public Expression Visit(FilterExpression exp)
         {
             if (exp == null)
+            {
                 return null;
+            }
 
             switch (exp.NodeType)
             {
@@ -39,7 +41,7 @@ namespace QueryByText
                     return VisitConstant(exp);
 
                 default:
-                    throw new NotSupportedException($"Not supported NodeType {exp.NodeType} with value {exp.Value}");
+                    throw new NotSupportedException($"Not supported node type {exp.NodeType} with value {exp.Value}");
             }
         }
 
@@ -59,12 +61,18 @@ namespace QueryByText
             var rightTypeCode = Type.GetTypeCode(right.Type);
 
             if (leftTypeCode == rightTypeCode)
+            {
                 return;
+            }
 
             if (leftTypeCode > rightTypeCode)
+            {
                 right = Expression.Convert(right, left.Type);
+            }
             else
+            {
                 left = Expression.Convert(left, right.Type);
+            }
         }
 
         private Expression VisitConstant(FilterExpression exp)
@@ -75,7 +83,7 @@ namespace QueryByText
 
         private Expression VisitField(FilterExpression exp)
         {
-            string propName = Helper.FirstToUppercase((string)exp.Value);
+            var propName = Helper.FirstToUppercase((string)exp.Value);
             return Expression.MakeMemberAccess(_parameterExpr, _parameterExpr.Type.GetProperty(propName));
         }
     }

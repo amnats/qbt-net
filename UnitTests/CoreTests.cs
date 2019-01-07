@@ -12,13 +12,13 @@ namespace UnitTests
     [TestFixture]
     public class Tests
     {
-        public IQueryable<Order> Orders { get; } = new List<Order>
+        private IQueryable<Order> Orders { get; } = new List<Order>
         {
             new Order {Id = 1, ProductType = "Zinc High Grade", RequestedWeight = 1100},
             new Order {Id = 2, ProductType = "Zinc LME", RequestedWeight = 1000}
         }.AsQueryable();
 
-        public FilterExpressionBuilder<Order> Builder { get; } = new FilterExpressionBuilder<Order>();
+        private FilterExpressionBuilder<Order> Builder { get; } = new FilterExpressionBuilder<Order>();
 
         [Test]
         public void Equal()

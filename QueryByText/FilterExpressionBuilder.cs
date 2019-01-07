@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace QueryByText
 {
@@ -37,48 +36,52 @@ namespace QueryByText
 
         private FilterExpression TranslateToFilterExpression(string filterStr)
         {
-            var filter = SplitFilterQuery(filterStr);
+            var splitExp = SplitFilterQuery(filterStr);
 
-            if (filter.Length != 3)
-                throw new NotSupportedException("Not supported number of nodes");
+            if (splitExp.Length != 3)
+            {
+                throw new NotSupportedException($"Not supported number of nodes: {splitExp.Length}");
+            }
 
-            var exprOne = FilterExpression.Create(filter[0], _objType);
-            var exprTwo = FilterExpression.Create(filter[2], _objType);
+            var exprOne = FilterExpression.Create(splitExp[0], _objType);
+            var exprTwo = FilterExpression.Create(splitExp[2], _objType);
 
-            var finalExpression = FilterExpression.Create(exprOne, exprTwo, filter[1], _objType);
+            var finalExpression = FilterExpression.Create(exprOne, exprTwo, splitExp[1], _objType);
 
             return finalExpression;
         }
 
         private string[] SplitFilterQuery(string filterStr)
         {
-            // so ugly you should kill yourself lol
-            var splitted = new List<string>();
-            bool insideQuotes = false;
-            string node = "";
+            var splitExp = new List<string>();
+            var shouldEscape = false;
+            var node = "";
+            
             // TODO: change to a reqular expression
-            for (int i = 0; i < filterStr.Length; i++)
+            for (var i = 0; i < filterStr.Length; i++)
             {
-                char ch = filterStr[i];
-
-                switch (ch)
+                var ch = filterStr[i];
+                
+                if (ch == '\'')
                 {
-                    case '\'' when insideQuotes == false:
-                        insideQuotes = true;
-                        continue;
-                    case '\'' when insideQuotes == true:
-                        insideQuotes = false;
-                        splitted.Add(node);
+                    if (shouldEscape)
+                    {
+                        splitExp.Add(node);
                         node = "";
-                        continue;
+                    }
+                    shouldEscape = !shouldEscape;
+
+                    continue;
                 }
 
                 if (i == filterStr.Length - 1)
-                    node += ch;
-
-                if (!insideQuotes && (ch == ' ' || i == filterStr.Length - 1) && node != "")
                 {
-                    splitted.Add(node);
+                    node += ch;
+                }
+
+                if (!shouldEscape && (ch == ' ' || i == filterStr.Length - 1) && node != "")
+                {
+                    splitExp.Add(node);
                     node = "";
                     continue;
                 }
@@ -86,7 +89,7 @@ namespace QueryByText
                 node += ch;
             }
 
-            return splitted.ToArray();
+            return splitExp.ToArray();
         }
     }
 }
